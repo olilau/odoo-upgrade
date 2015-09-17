@@ -166,7 +166,7 @@ Example:
 
     odoo-upgrade.py status --key 'aeDp9UThC7A6fwk0dJRszA==' --request 10042
 
-The JSON dictionary your receive is described on the `Upgrade API
+The JSON dictionary you receive is described on the `Upgrade API
 <https://www.odoo.com/documentation/8.0/reference/upgrade_api.html>`_ page, in the
 `Sample output` section
 
