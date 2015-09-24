@@ -18,8 +18,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     'action', choices=['create', 'upload', 'process', 'status'],
     help="Action to perform. Choices: %(choices)s", action='store',
-    metavar='ACTION',
-    nargs='?')
+    metavar='ACTION')
 verb = parser.add_mutually_exclusive_group()
 verb.add_argument(
     '-q', '--quiet', help="Quiet output", dest="verbose", default=[1],
