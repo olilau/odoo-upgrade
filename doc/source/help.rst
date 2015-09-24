@@ -69,7 +69,7 @@ Here is an example of how to create a request:
 
 ::
 
-  odoo-upgrade.py create --contract=M123-abc \
+  odoo_upgrade create --contract=M123-abc \
     --email john.doe@example.com --target 8.0 \
     --aim test --filename db.dump
 
@@ -88,12 +88,12 @@ If you current Odoo database is 5.0 or 6.0, you can also supply the
 The ``timezone`` option needs an exact match on an existing timezone. You can
 get the list of valid timezones in the `timezones.txt` file.
 
-The `odoo-upgrade.py` script will also try to display a list of the closest
+The `odoo_upgrade` script will also try to display a list of the closest
 matching timezones:
 
 ::
 
-  odoo-upgrade.py create --contract=M123-abc \
+  odoo_upgrade create --contract=M123-abc \
     --email john.doe@example.com --target 8.0 \
     --aim test --filename db.dump --timezone brus
 
@@ -101,7 +101,7 @@ matching timezones:
   matches:
   'Europe/Brussels
 
-  odoo-upgrade.py create --contract=M123-abc \
+  odoo_upgrade create --contract=M123-abc \
     --email john.doe@example.com --target 8.0 \
     --aim test --filename db.dump --timezone 'Europe/Brussels'
 
@@ -120,7 +120,7 @@ Here is an example of how to upload your database dump:
     # dump your db:
     pg_dump db_name | gzip > db_name.sql.gz
     # upload the dump file:
-    odoo-upgrade.py upload --key 'aeDp9UThC7A6fwk0dJRszA==' \
+    odoo_upgrade upload --key 'aeDp9UThC7A6fwk0dJRszA==' \
       --request 10042 --dbdump db_name.sql.gz
 
 Asking to process your request
@@ -135,7 +135,7 @@ Example:
 
 ::
 
-    odoo-upgrade.py process --key 'aeDp9UThC7A6fwk0dJRszA==' \
+    odoo_upgrade process --key 'aeDp9UThC7A6fwk0dJRszA==' \
       --request 10042
 
 Obtaining the status of your request
@@ -150,7 +150,7 @@ Example:
 
 ::
 
-    odoo-upgrade.py status --key 'aeDp9UThC7A6fwk0dJRszA==' \
+    odoo_upgrade status --key 'aeDp9UThC7A6fwk0dJRszA==' \
       --request 10042
 
 The JSON dictionary you receive is described on the `Upgrade API
