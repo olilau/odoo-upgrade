@@ -3,6 +3,8 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
+from odoo_upgrade.version import __version__
+
 long_description="""\
 A command line tool to upgrade your `Odoo <https://www.odoo.com>`_ database
 using the `Upgrade API <https://www.odoo.com/documentation/8.0/reference/upgrade_api.html>`_
@@ -21,16 +23,17 @@ It allows to:
 * obtain the current status of your request
 """
 
+
 setup(
     name='odoo-upgrade',
-    version='1.0.3',
+    version=__version__,
     description='Command line tool to upgrade your Odoo database',
     long_description=long_description,
     url='https://github.com/olilau/odoo-upgrade',
     author='olivier Laurent',
     author_email='olilau@gmail.com',
     license='GPLv2',
-    # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
+    # https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Information Technology',
@@ -41,11 +44,16 @@ setup(
         'Operating System :: POSIX',
     ],
     keywords='odoo openerp database upgrade',
-    packages=None,
+    packages=['odoo_upgrade'],
+    entry_points={
+        'console_scripts': [
+            'odoo_upgrade = odoo_upgrade.__main__:main'
+        ]
+    },
     install_requires=['pycurl', 'pytz'],
-    scripts = [
-        'odoo-upgrade.py'
-    ],
+    #scripts = [
+    #    'odoo-upgrade.py'
+    #],
     package_data = {
         '': ['*.rst'],
     },
