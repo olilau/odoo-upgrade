@@ -25,7 +25,7 @@ It allows to:
 
 
 setup(
-    name='odoo-upgrade',
+    name='odoo_upgrade',
     version=__version__,
     description='Command line tool to upgrade your Odoo database',
     long_description=long_description,
@@ -51,9 +51,6 @@ setup(
         ]
     },
     install_requires=['pycurl', 'pytz'],
-    #scripts = [
-    #    'odoo-upgrade.py'
-    #],
     package_data = {
         '': ['*.rst'],
     },
