@@ -1,8 +1,8 @@
 
 A command line tool to upgrade your `Odoo <https://www.odoo.com>`_ database
-using the `Upgrade API <https://www.odoo.com/documentation/8.0/reference/upgrade_api.html>`_
-documented on the `official Odoo documentation <https://www.odoo.com/documentation>`_ (`v8.0 page
-<https://www.odoo.com/documentation/8.0/reference/upgrade_api.html>`_)
+using the `Upgrade API <https://www.odoo.com/documentation/9.0/reference/upgrade_api.html>`_
+documented on the `official Odoo documentation <https://www.odoo.com/documentation>`_ (`v9.0 page
+<https://www.odoo.com/documentation/9.0/reference/upgrade_api.html>`_)
 
 .. note:: You'll need an Odoo Enterprise Contract.
 
