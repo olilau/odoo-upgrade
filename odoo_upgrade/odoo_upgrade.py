@@ -15,19 +15,21 @@ from urllib import urlencode
 from io import BytesIO
 import json
 import functools
+import datetime
 
 import pycurl
 import pytz
 
 
 LOG_FMT = '%(message)s'
+PROGRESS_INTERVAL = 2
 
 ERROR_HTTP_4xx = 1
 ERROR_HTTP_5xx = 2
 ERROR_MISSING_ARGUMENT = 3
 ERROR_FILE_NOT_FOUND = 4
 ERROR_MISSING_ARGUMENT_MSG = (
-    "Argument '{}' is mandatory for 'create' action. Aborting")
+    "Argument '{}' is mandatory for '{}' action. Aborting")
 
 CURLINFO = """EFFECTIVE_URL RESPONSE_CODE HTTP_CONNECTCODE TOTAL_TIME
 NAMELOOKUP_TIME CONNECT_TIME APPCONNECT_TIME PRETRANSFER_TIME
@@ -48,7 +50,7 @@ def require(*requires):
         def f(self, *args, **kwargs):
             for arg in requires:
                 if not getattr(self.args, arg):
-                    logging.error(ERROR_MISSING_ARGUMENT_MSG.format(arg))
+                    logging.error(ERROR_MISSING_ARGUMENT_MSG.format(arg, self.args.action))
                     sys.exit(ERROR_MISSING_ARGUMENT)
             return method(self, *args, **kwargs)
         return f
@@ -184,6 +186,35 @@ class UpgradeManager(object):
             curl.setopt(
                 pycurl.HTTPHEADER,
                 ['%s: %s' % (k, headers[k]) for k in headers])
+
+            self.t1 = datetime.datetime.now()
+            self.t0 = self.t1
+
+            if self.verbose > 0:
+                def progress(to_download, downloaded, to_upload, uploaded):
+                    def display_delta(delta):
+                        hours, remainder = divmod(delta.total_seconds(), 3600)
+                        minutes, seconds = divmod(remainder, 60)
+                        return '{:0>2}:{:0>2}:{:0>2}'.format(
+                            int(hours), int(minutes), int(seconds))
+
+                    self.t2 = datetime.datetime.now()
+                    if (self.t2 - self.t1).total_seconds() > PROGRESS_INTERVAL:
+                        eta = datetime.timedelta(
+                            seconds=((self.t2 - self.t0).total_seconds()
+                                * to_upload / uploaded))
+                        s = ("{}/{} bytes uploaded ({:.2%}) in {} "
+                             "(TOTAL estimated time: {})").format(
+                                int(uploaded), int(to_upload),
+                                (uploaded / to_upload),
+                                display_delta(self.t2 - self.t0),
+                                display_delta(eta))
+                        sys.stdout.write(s+'\r')
+                        sys.stdout.flush()
+                        self.t1 = datetime.datetime.now()
+
+                curl.setopt(curl.NOPROGRESS, 0)
+                curl.setopt(curl.PROGRESSFUNCTION, progress)
 
             curl.perform()
             http_status = curl.getinfo(pycurl.HTTP_CODE)
