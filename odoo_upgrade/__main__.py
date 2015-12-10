@@ -103,7 +103,15 @@ obscure_group.add_argument(
 def main():
     args = parser.parse_args()
     app = UpgradeManager(args)
-    app.run()
+    import pycurl
+    try:
+        app.run()
+    except pycurl.error as exc:
+        if exc[0] == 42:
+            import sys
+            sys.stderr.write("Exited\n")
+        else:
+            raise
 
 if __name__ == '__main__':
     main()
