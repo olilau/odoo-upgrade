@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 #-*- encoding: utf8 -*-
 
+"""
+Cmmand line tool to upgrade your Odoo database using the Upgrade API.
+You’ll need an Odoo Enterprise Contract.
+Allows to:
+    create a database upgrade request
+    upload a database dump
+    ask to process it
+    obtain the current status of your request
+"""
+
 from __future__ import absolute_import
 
 import argparse
@@ -13,12 +23,18 @@ TARGETS = "6.0 6.1 7.0 8.0 9.0".split()
 
 
 parser = argparse.ArgumentParser(
+    prog='odoo_upgrade',
     description=__doc__,
     formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument(
     'action', choices=['create', 'upload', 'process', 'status'],
     help="Action to perform. Choices: %(choices)s", action='store',
     metavar='ACTION')
+parser.add_argument(
+    '-V', '--version',
+    action='version', version='%(prog)s (version {})'.format(__version__),
+    help="Display version information")
+
 verb = parser.add_mutually_exclusive_group()
 verb.add_argument(
     '-q', '--quiet', help="Quiet output", dest="verbose", default=[1],
@@ -28,10 +44,6 @@ verb.add_argument(
     action='append_const', const=1,
     help=("Verbose output.\n"
           "Use -q, --quiet to make it quiet"))
-verb.add_argument(
-    '-V', '--version',
-    action='version', version='%(prog)s (version {})'.format(__version__),
-    help="Display version information")
 
 request_group = parser.add_argument_group("Request arguments")
 request_group.add_argument(
