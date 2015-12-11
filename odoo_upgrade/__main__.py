@@ -27,8 +27,14 @@ parser = argparse.ArgumentParser(
     description=__doc__,
     formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument(
-    'action', choices=['create', 'upload', 'process', 'status'],
-    help="Action to perform. Choices: %(choices)s", action='store',
+    'action', choices=['create', 'upload', 'process', 'all', 'status'],
+    help=("Action to perform. Choices: %(choices)s\n"
+          "create: creates the request\n"
+          "upload: upload the database\n"
+          "process: actualy perform the database upgrade\n"
+          "all: do the 3 previous operations in one go\n"
+          "status: display the current status of your upgrade request\n"
+          ), action='store',
     metavar='ACTION')
 parser.add_argument(
     '-V', '--version',

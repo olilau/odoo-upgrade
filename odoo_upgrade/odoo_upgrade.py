@@ -108,6 +108,8 @@ class UpgradeManager(object):
             status = self.upload()
         elif self.args.action == 'process':
             status = self.process()
+        elif self.args.action == 'all':
+            status = self.do_all()
         elif self.args.action == 'status':
             status = self.status()
 
@@ -116,6 +118,7 @@ class UpgradeManager(object):
     @require('contract', 'email', 'target', 'aim', 'filename')
     def create(self):
         API_PATH = "/database/v1/create"
+        self.output['operation'] = 'create'
         fields = dict(filter(None, [
             ('contract', self.args.contract),
             ('email', self.args.email),
@@ -147,8 +150,8 @@ class UpgradeManager(object):
                     for info
                     in CURLINFO})
 
-            upgrade_response = json.loads(data.getvalue())
-            self.output['upgrade_response'] = upgrade_response
+            self.upgrade_response = json.loads(data.getvalue())
+            self.output['upgrade_response'] = self.upgrade_response
 
             # output display:
             logging.info(self.format_json(self.output))
@@ -159,6 +162,7 @@ class UpgradeManager(object):
     @require('key', 'request', 'dbdump')
     def upload(self):
         API_PATH = "/database/v1/upload"
+        self.output['operation'] = 'upload'
         fields = dict([
             ('key', self.args.key),
             ('request', self.args.request),
@@ -199,7 +203,7 @@ class UpgradeManager(object):
                             int(hours), int(minutes), int(seconds))
 
                     self.t2 = datetime.datetime.now()
-                    if (self.t2 - self.t1).total_seconds() > PROGRESS_INTERVAL:
+                    if uploaded and (self.t2 - self.t1).total_seconds() > PROGRESS_INTERVAL:
                         eta = datetime.timedelta(
                             seconds=((self.t2 - self.t0).total_seconds()
                                 * to_upload / uploaded))
@@ -209,8 +213,8 @@ class UpgradeManager(object):
                                 (uploaded / to_upload),
                                 display_delta(self.t2 - self.t0),
                                 display_delta(eta))
-                        sys.stdout.write(s+'\r')
-                        sys.stdout.flush()
+                        sys.stderr.write(s+'\r')
+                        sys.stderr.flush()
                         self.t1 = datetime.datetime.now()
 
                 curl.setopt(curl.NOPROGRESS, 0)
@@ -241,6 +245,7 @@ class UpgradeManager(object):
     @require('key', 'request')
     def process(self):
         API_PATH = "/database/v1/process"
+        self.output['operation'] = 'process'
         fields = dict([
             ('key', self.args.key),
             ('request', self.args.request),
@@ -280,6 +285,7 @@ class UpgradeManager(object):
     @require('key', 'request')
     def status(self):
         API_PATH = "/database/v1/status"
+        self.output['operation'] = 'status'
         fields = dict([
             ('key', self.args.key),
             ('request', self.args.request),
@@ -315,8 +321,20 @@ class UpgradeManager(object):
             if http_status >= 400:
                 return ERROR_HTTP_4xx if http_status < 500 else ERROR_HTTP_5xx
 
+    @require('contract', 'email', 'target', 'aim', 'filename', 'dbdump')
+    def do_all(self):
+        self.create()
+        if self.output['upgrade_response']:
+            self.args.key = self.output['upgrade_response']['request']['key']
+            self.args.request = self.output['upgrade_response']['request']['id']
+
+        self.upload()
+        self.process()
+        self.status()
+
     def init_output(self):
         return {
+            'operation': '',
             'curl_info': {},
             'http_status': {
             },
