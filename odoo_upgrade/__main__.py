@@ -64,7 +64,7 @@ request_group.add_argument(
     help="Odoo target version\nChoices: %(choices)s")
 request_group.add_argument(
     '--filename', action='store',
-    help="Name of your dump file. Purely informative")
+    help="Deprecated option. Kept for backward compatibility. The filename is now taken from the dbdump option.")
 request_group.add_argument(
     '--aim', choices=['test', 'production'],
     action='store', metavar='AIM',

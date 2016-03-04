@@ -115,16 +115,18 @@ class UpgradeManager(object):
 
         sys.exit(status if status else 0)
 
-    @require('contract', 'email', 'target', 'aim', 'filename')
+    @require('contract', 'email', 'target', 'aim', 'dbdump')
     def create(self):
         API_PATH = "/database/v1/create"
         self.output['operation'] = 'create'
+        dbdump = os.path.expandvars(os.path.expanduser(self.args.dbdump))
+        filename = os.path.split(dbdump)[1]
         fields = dict(filter(None, [
             ('contract', self.args.contract),
             ('email', self.args.email),
             ('target', self.args.target),
             ('aim', self.args.aim),
-            ('filename', self.args.filename),
+            ('filename', filename),
             ('timezone', self.args.timezone) if self.args.timezone else None,
         ]))
         postfields = urlencode(fields)
@@ -182,9 +184,9 @@ class UpgradeManager(object):
             data = BytesIO()
             curl.setopt(curl.WRITEFUNCTION, data.write)
 
-            filesize = os.path.getsize(self.args.dbdump)
+            filesize = os.path.getsize(dbdump)
             curl.setopt(pycurl.POSTFIELDSIZE, filesize)
-            fp = open(self.args.dbdump, 'rb')
+            fp = open(dbdump, 'rb')
             curl.setopt(pycurl.READFUNCTION, fp.read)
             headers = {"Content-Type": "application/octet-stream"}
             curl.setopt(
@@ -321,7 +323,7 @@ class UpgradeManager(object):
             if http_status >= 400:
                 return ERROR_HTTP_4xx if http_status < 500 else ERROR_HTTP_5xx
 
-    @require('contract', 'email', 'target', 'aim', 'filename', 'dbdump')
+    @require('contract', 'email', 'target', 'aim', 'dbdump')
     def do_all(self):
         self.create()
         if self.output['upgrade_response']:
