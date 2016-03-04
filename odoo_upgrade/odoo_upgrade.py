@@ -325,14 +325,25 @@ class UpgradeManager(object):
 
     @require('contract', 'email', 'target', 'aim', 'dbdump')
     def do_all(self):
-        self.create()
+        exitcode = self.create()
+        if exitcode:
+            logging.error("'create' exited with status code={}".format(exitcode))
+            sys.exit(exitcode)
         if self.output['upgrade_response']:
             self.args.key = self.output['upgrade_response']['request']['key']
             self.args.request = self.output['upgrade_response']['request']['id']
-
-        self.upload()
-        self.process()
-        self.status()
+        exitcode = self.upload()
+        if exitcode:
+            logging.error("'upload' exited with status code={}".format(exitcode))
+            sys.exit(exitcode)
+        exitcode = self.process()
+        if exitcode:
+            logging.error("'process' exited with status code={}".format(exitcode))
+            sys.exit(exitcode)
+        exitcode = self.status()
+        if exitcode:
+            logging.error("'status' exited with status code={}".format(exitcode))
+            sys.exit(exitcode)
 
     def init_output(self):
         return {
