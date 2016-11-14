@@ -9,11 +9,31 @@ The first thing you'll want to do is obtaining help:
   odoo-upgrade --help
 
 
+Operations
+----------
+
+You can execute ``odoo_upgrade`` using 5 commands:
+
+* ``create``:
+  creates an upgrade request
+* ``upload``:
+  uploads your database related to that request
+* ``process``:
+  executes the upgrade process related to your request
+* ``all``:
+  performs the ``create``, ``upload``, ``process`` operations all at once
+* ``status``:
+  obtain the status about your request
+
+
+You can combine the first 3 operations with a single command which is called ``all``
+
 Result
-------
+++++++
 
-The 4 actions (create, upload, process, status) return a JSON dictionary with 3 keys:
+The 4 actions (create, upload, process, status) return a JSON dictionary with 4 keys:
 
+* ``operation``: the operation you are currently performing (create, upload, process, status)
 * ``curl_info``: curl debug info (only filled if `--verbose` is used)
 * ``http_status``: the http code result
 * ``upgrade_response``: the JSON dictionary described on the `Upgrade API
@@ -50,7 +70,7 @@ The purpose is to supply all the required information:
 * ``aim``: the purpose of your request (test or production)
 * ``filename``: a name for your dump file
 
-This is the minimum list of required optin for creating a request.
+This is the minimum list of required option for creating a request.
 
 .. _important-keys:
 
