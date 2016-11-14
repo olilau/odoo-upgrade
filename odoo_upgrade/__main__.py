@@ -19,7 +19,7 @@ from .version import __version__
 from .odoo_upgrade import UpgradeManager
 
 DEFAULT_URL = "https://upgrade.odoo.com"
-TARGETS = "6.0 6.1 7.0 8.0 9.0".split()
+TARGETS = "6.0 6.1 7.0 8.0 9.0 10.0".split()
 
 
 parser = argparse.ArgumentParser(
