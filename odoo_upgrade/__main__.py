@@ -19,7 +19,7 @@ from .version import __version__
 from .odoo_upgrade import UpgradeManager
 
 DEFAULT_URL = "https://upgrade.odoo.com"
-TARGETS = "6.0 6.1 7.0 8.0 9.0 10.0".split()
+TARGETS = "6.0 6.1 7.0 8.0 9.0 10.0 11.0".split()
 
 
 parser = argparse.ArgumentParser(
@@ -54,7 +54,7 @@ verb.add_argument(
 request_group = parser.add_argument_group("Request arguments")
 request_group.add_argument(
     '--contract', action='store', metavar='CONTRACT',
-    help="Your Enterprise contarct reference")
+    help="Your Enterprise contract reference")
 request_group.add_argument(
     '--email', action='store', metavar='ADDRESS',
     help="Your email address")
