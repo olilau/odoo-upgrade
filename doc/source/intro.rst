@@ -18,6 +18,11 @@ It allows to:
 * ask to process it
 * obtain the current status of your request
 
+Documentation
+-------------
+
+https://odoo-upgrade.readthedocs.io
+
 Requires
 --------
 
