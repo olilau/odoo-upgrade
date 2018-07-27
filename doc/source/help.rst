@@ -37,7 +37,7 @@ The 4 actions (create, upload, process, status) return a JSON dictionary with 4 
 * ``curl_info``: curl debug info (only filled if `--verbose` is used)
 * ``http_status``: the http code result
 * ``upgrade_response``: the JSON dictionary described on the `Upgrade API
-  <https://www.odoo.com/documentation/8.0/reference/upgrade_api.html>`_ page, in the
+  <https://www.odoo.com/documentation/11.0/webservices/upgrade.html>`_ page, in the
   `Sample output` section
 
 Example
@@ -90,7 +90,7 @@ Here is an example of how to create a request:
 ::
 
   odoo_upgrade create --contract=M123-abc \
-    --email john.doe@example.com --target 8.0 \
+    --email john.doe@example.com --target 11.0 \
     --aim test --filename db.dump
 
 Supplying the timezone
@@ -114,7 +114,7 @@ matching timezones:
 ::
 
   odoo_upgrade create --contract=M123-abc \
-    --email john.doe@example.com --target 8.0 \
+    --email john.doe@example.com --target 11.0 \
     --aim test --filename db.dump --timezone brus
 
   Timezone 'brus' is not a valid value. Here is a list of closest
@@ -122,7 +122,7 @@ matching timezones:
   'Europe/Brussels
 
   odoo_upgrade create --contract=M123-abc \
-    --email john.doe@example.com --target 8.0 \
+    --email john.doe@example.com --target 11.0 \
     --aim test --filename db.dump --timezone 'Europe/Brussels'
 
 Uploading a database dump
@@ -174,6 +174,6 @@ Example:
       --request 10042
 
 The JSON dictionary you receive is described on the `Upgrade API
-<https://www.odoo.com/documentation/8.0/reference/upgrade_api.html>`_ page, in the
+<https://www.odoo.com/documentation/11.0/webservices/upgrade.html>`_ page, in the
 `Sample output` section
 
